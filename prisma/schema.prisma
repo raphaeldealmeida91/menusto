@@ -10,11 +10,32 @@ datasource db {
 
 model Restaurant {
   id          String   @id @default(uuid())
-  name        String
+  name        String   @unique
   address     String
   description String?
   email       String
   phoneNumber String
   bannerUrl   String
+  activate    Boolean  @default(false)
   createdAt   DateTime @default(now())
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+}
+
+model AccountCreationToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  email     String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  restaurants Restaurant[]
 }

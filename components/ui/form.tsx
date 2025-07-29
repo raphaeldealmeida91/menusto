@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "./textarea";
 import { Input } from "./input";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 const Form = FormProvider;
 
@@ -161,11 +162,12 @@ interface FormFieldBlockProps<T extends FieldValues> {
   control: Control<T>;
   name: FieldPath<T>;
   label: string;
-  type?: "text" | "email" | "tel" | "file" | "textarea";
+  type?: "text" | "email" | "tel" | "file" | "textarea" | "password";
   placeholder?: string;
   description?: string;
   accept?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 }
 
 function FormFieldBlock<T extends FieldValues>({
@@ -177,7 +179,11 @@ function FormFieldBlock<T extends FieldValues>({
   description,
   accept,
   onChange,
+  disabled,
 }: FormFieldBlockProps<T>) {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const isPassword = type === "password";
+
   return (
     <Controller
       control={control}
@@ -195,7 +201,27 @@ function FormFieldBlock<T extends FieldValues>({
                 onChange={onChange}
                 onBlur={field.onBlur}
                 className="block w-full text-sm text-gray-700 cursor-pointer"
+                disabled={disabled}
               />
+            ) : isPassword ? (
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder={placeholder}
+                  {...field}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? (
+                    <EyeOffIcon className="h-5 w-5 cursor-pointer" />
+                  ) : (
+                    <EyeIcon className="h-5 w-5 cursor-pointer" />
+                  )}
+                </button>
+              </div>
             ) : (
               <Input type={type} placeholder={placeholder} {...field} />
             )}

@@ -14,7 +14,7 @@ function SkeletonCardList({ count = 5 }: { count?: number }) {
   return (
     <>
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} className="flex space-x-4 w-full">
+        <div key={index} className="flex space-x-4 space-y-2 w-full">
           <Skeleton className="h-16 w-16 rounded-full" />
           <div className="flex w-full flex-col space-y-2">
             <Skeleton className="h-4 w-full" />
